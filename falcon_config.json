@@ -1,0 +1,5 @@
+{
+  $ClientId = "71e4b43b4990477594f9c70076f58322"
+  $ClientSecret= 
+  $BaseUrl= "https://api.us-2.crowdstrike.com"
+}
