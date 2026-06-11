@@ -1,0 +1,507 @@
+param(
+    [Parameter(Mandatory=$true)]
+    [string]$TargetDate
+)
+
+# =========================================================
+# CrowdStrike Falcon Alert Daily Report
+# 실행 예:
+# pwsh ./falcon_report.ps1 -TargetDate "2026-06-10"
+# =========================================================
+
+# ------------------------------
+# 1. API 기본 정보
+# ------------------------------
+if ($PSScriptRoot) {
+    $ScriptDir = $PSScriptRoot
+} else {
+    $ScriptDir = (Get-Location).Path
+}
+
+$ConfigPath = Join-Path -Path $ScriptDir -ChildPath "falcon_config.json"
+
+if (-not (Test-Path $ConfigPath)) {
+    Write-Host "설정 파일을 찾을 수 없습니다: $ConfigPath"
+    exit 1
+}
+
+$Config = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
+
+$BaseUrl = $Config.BaseUrl
+$ClientId = $Config.ClientId
+$ClientSecret = $Config.ClientSecret
+
+if ([string]::IsNullOrWhiteSpace($BaseUrl) -or
+    [string]::IsNullOrWhiteSpace($ClientId) -or
+    [string]::IsNullOrWhiteSpace($ClientSecret)) {
+
+    Write-Host "설정 파일에 BaseUrl, ClientId, ClientSecret 값이 모두 있어야 합니다."
+    exit 1
+}
+# ------------------------------
+# 2. Access Token 발급
+# ------------------------------
+$TokenResponse = Invoke-RestMethod `
+    -Method Post `
+    -Uri "$BaseUrl/oauth2/token" `
+    -ContentType "application/x-www-form-urlencoded" `
+    -Body @{
+        client_id     = $ClientId
+        client_secret = $ClientSecret
+    }
+
+$AccessToken = $TokenResponse.access_token
+
+if (-not $AccessToken) {
+    Write-Host "Access Token 발급 실패"
+    exit 1
+}
+
+Write-Host "Access Token 발급 성공"
+
+$Headers = @{
+    Authorization = "Bearer $AccessToken"
+    Accept        = "application/json"
+}
+
+# ------------------------------
+# 3. 지정일 KST 00:00~23:59 → UTC 변환
+# ------------------------------
+$StartKst = [datetime]::ParseExact("$TargetDate 00:00:00", "yyyy-MM-dd HH:mm:ss", $null)
+$EndKst   = [datetime]::ParseExact("$TargetDate 23:59:59", "yyyy-MM-dd HH:mm:ss", $null)
+
+$StartUtc = $StartKst.AddHours(-9).ToString("yyyy-MM-ddTHH:mm:ssZ")
+$EndUtc   = $EndKst.AddHours(-9).ToString("yyyy-MM-ddTHH:mm:ssZ")
+
+Write-Host "KST 시작: $StartKst"
+Write-Host "KST 종료: $EndKst"
+Write-Host "UTC 시작: $StartUtc"
+Write-Host "UTC 종료: $EndUtc"
+
+# ------------------------------
+# 4. Alert 조회 필터
+# Endpoint Protection Alert 기준
+# 필요 시 product:'epp' 제거 가능
+# ------------------------------
+$Filter = "product:'epp'+created_timestamp:>='$StartUtc'+created_timestamp:<='$EndUtc'"
+
+Write-Host "`n사용 필터:"
+Write-Host $Filter
+
+# ------------------------------
+# 5. Alerts 상세 전체 조회
+# /alerts/combined/alerts/v1
+# limit 최대 1000, after 토큰으로 반복 조회
+# ------------------------------
+$AllAlerts = @()
+$After = $null
+
+do {
+    $DetailBodyObject = @{
+        filter = $Filter
+        sort   = "created_timestamp.asc"
+        limit  = 1000
+    }
+
+    if ($After) {
+        $DetailBodyObject.after = $After
+    }
+
+    $DetailBody = ConvertTo-Json -InputObject $DetailBodyObject -Depth 10 -Compress
+
+    $AlertResponse = Invoke-RestMethod `
+        -Method Post `
+        -Uri "$BaseUrl/alerts/combined/alerts/v1" `
+        -Headers $Headers `
+        -ContentType "application/json" `
+        -Body $DetailBody
+
+    if ($AlertResponse.resources) {
+        $AllAlerts += $AlertResponse.resources
+    }
+
+    $After = $AlertResponse.meta.pagination.after
+
+    Write-Host "현재 누적 조회 건수: $($AllAlerts.Count)"
+
+} while ($After)
+
+if ($AllAlerts.Count -eq 0) {
+    Write-Host "`n조회된 Alert가 없습니다."
+    exit 0
+}
+
+# ------------------------------
+# 6. 탐지 / 차단 집계
+# severity 기준:
+# 0~59   = 단순/낮음/중간
+# 60~100 = 높음/심각
+#
+# 분류 기준:
+# - action = none → 탐지
+# - action 값이 있고 none이 아니면 → 차단
+# - action 값이 비어 있으면 pattern_disposition_description 기준으로 판단
+# - 조치 실패(Kill Action Failed 등)는 차단 성공이 아니므로 탐지로 포함
+# ------------------------------
+
+$DetectLowMid = 0
+$DetectHighCritical = 0
+
+$BlockLowMid = 0
+$BlockHighCritical = 0
+
+$UnknownLowMid = 0
+$UnknownHighCritical = 0
+
+foreach ($Alert in $AllAlerts) {
+
+    # severity 값 처리
+    $Severity = 0
+    if ($null -ne $Alert.severity) {
+        $Severity = [int]$Alert.severity
+    }
+
+    $IsHigh = $Severity -ge 60
+
+    # action 값 처리
+    $Action = ""
+    if ($null -ne $Alert.action) {
+        $Action = [string]$Alert.action
+    }
+
+    # pattern_disposition_description 값 처리
+    $DispositionDesc = ""
+    if ($null -ne $Alert.pattern_disposition_description) {
+        $DispositionDesc = [string]$Alert.pattern_disposition_description
+    }
+
+    # 1순위: action 기준
+    if ($Action -eq "none") {
+
+        if ($IsHigh) {
+            $DetectHighCritical++
+        } else {
+            $DetectLowMid++
+        }
+
+    } elseif (-not [string]::IsNullOrWhiteSpace($Action)) {
+
+        if ($IsHigh) {
+            $BlockHighCritical++
+        } else {
+            $BlockLowMid++
+        }
+
+    } else {
+
+        # 2순위: pattern_disposition_description 기준
+        if ($DispositionDesc -match "Prevention|Blocked|Block|Quarantine|Quarantined|Prevented|Killed|process killed|operation blocked") {
+
+            if ($IsHigh) {
+                $BlockHighCritical++
+            } else {
+                $BlockLowMid++
+            }
+
+        } elseif ($DispositionDesc -match "Detection|Failed|Action Failed|Kill Action Failed") {
+
+            if ($IsHigh) {
+                $DetectHighCritical++
+            } else {
+                $DetectLowMid++
+            }
+
+        } else {
+
+            if ($IsHigh) {
+                $UnknownHighCritical++
+            } else {
+                $UnknownLowMid++
+            }
+        }
+    }
+}
+
+$DetectTotal = $DetectLowMid + $DetectHighCritical
+$BlockTotal = $BlockLowMid + $BlockHighCritical
+$UnknownTotal = $UnknownLowMid + $UnknownHighCritical
+$GrandTotal = $DetectTotal + $BlockTotal + $UnknownTotal
+
+# ------------------------------
+# 7. 보고서 출력
+# ------------------------------
+
+$Report = @(
+    [PSCustomObject]@{
+        구분 = "탐지 건수"
+        위험도 = "단순/낮음/중간"
+        건수 = $DetectLowMid
+    }
+    [PSCustomObject]@{
+        구분 = "탐지 건수"
+        위험도 = "높음/심각"
+        건수 = $DetectHighCritical
+    }
+    [PSCustomObject]@{
+        구분 = "탐지 건수"
+        위험도 = "전체 건수"
+        건수 = $DetectTotal
+    }
+    [PSCustomObject]@{
+        구분 = "차단 건수"
+        위험도 = "단순/낮음/중간"
+        건수 = $BlockLowMid
+    }
+    [PSCustomObject]@{
+        구분 = "차단 건수"
+        위험도 = "높음/심각"
+        건수 = $BlockHighCritical
+    }
+    [PSCustomObject]@{
+        구분 = "차단 건수"
+        위험도 = "전체 건수"
+        건수 = $BlockTotal
+    }
+)
+
+# 분류 불가가 있을 때만 출력
+if ($UnknownTotal -gt 0) {
+    $Report += [PSCustomObject]@{
+        구분 = "분류 불가"
+        위험도 = "단순/낮음/중간"
+        건수 = $UnknownLowMid
+    }
+    $Report += [PSCustomObject]@{
+        구분 = "분류 불가"
+        위험도 = "높음/심각"
+        건수 = $UnknownHighCritical
+    }
+    $Report += [PSCustomObject]@{
+        구분 = "분류 불가"
+        위험도 = "전체 건수"
+        건수 = $UnknownTotal
+    }
+}
+
+$Report += [PSCustomObject]@{
+    구분 = "전체"
+    위험도 = "전체 Alert"
+    건수 = $GrandTotal
+}
+
+Write-Host "`n[일일보고 집계 결과]"
+$Report | Format-Table -AutoSize
+
+# ------------------------------
+# 8. 현재 센서 OS별 설치 현황 조회
+# ------------------------------
+
+Write-Host "`n[현재 센서 OS별 설치 현황 조회 시작]"
+
+$AllDeviceIds = @()
+$DeviceScrollAfter = $null
+
+do {
+    # Device ID 목록 조회
+    $DeviceQueryUri = "$BaseUrl/devices/queries/devices-scroll/v1?limit=5000"
+
+    if ($DeviceScrollAfter) {
+        $EncodedAfter = [System.Web.HttpUtility]::UrlEncode($DeviceScrollAfter)
+        $DeviceQueryUri = "$DeviceQueryUri&offset=$EncodedAfter"
+    }
+
+    $DeviceQueryResponse = Invoke-RestMethod `
+        -Method Get `
+        -Uri $DeviceQueryUri `
+        -Headers $Headers `
+        -ContentType "application/json"
+
+    if ($DeviceQueryResponse.resources) {
+        $AllDeviceIds += $DeviceQueryResponse.resources
+    }
+
+    $DeviceScrollAfter = $DeviceQueryResponse.meta.pagination.offset
+
+} while ($DeviceScrollAfter)
+
+if ($AllDeviceIds.Count -eq 0) {
+    Write-Host "조회된 센서가 없습니다."
+} else {
+
+    $AllDevices = @()
+    $ChunkSize = 500
+
+    for ($i = 0; $i -lt $AllDeviceIds.Count; $i += $ChunkSize) {
+
+        $EndIndex = [Math]::Min($i + $ChunkSize - 1, $AllDeviceIds.Count - 1)
+        $ChunkIds = $AllDeviceIds[$i..$EndIndex]
+
+        $DeviceDetailBodyObject = @{
+            ids = $ChunkIds
+        }
+
+        $DeviceDetailBody = ConvertTo-Json -InputObject $DeviceDetailBodyObject -Depth 10 -Compress
+
+        $DeviceDetailResponse = Invoke-RestMethod `
+            -Method Post `
+            -Uri "$BaseUrl/devices/entities/devices/v2" `
+            -Headers $Headers `
+            -ContentType "application/json" `
+            -Body $DeviceDetailBody
+
+        if ($DeviceDetailResponse.resources) {
+            $AllDevices += $DeviceDetailResponse.resources
+        }
+    }
+
+    # OS별 개수 집계
+    $WindowsCount = @($AllDevices | Where-Object { $_.platform_name -match "Windows" }).Count
+    $MacCount     = @($AllDevices | Where-Object { $_.platform_name -match "Mac" }).Count
+    $LinuxCount   = @($AllDevices | Where-Object { $_.platform_name -match "Linux" }).Count
+    $UnknownCount = @($AllDevices | Where-Object {
+        [string]::IsNullOrWhiteSpace($_.platform_name) -or
+        ($_.platform_name -notmatch "Windows|Mac|Linux")
+    }).Count
+
+    $SensorOsReport = @(
+        [PSCustomObject]@{
+            OS = "Windows"
+            설치수 = $WindowsCount
+        }
+        [PSCustomObject]@{
+            OS = "Mac"
+            설치수 = $MacCount
+        }
+        [PSCustomObject]@{
+            OS = "Linux"
+            설치수 = $LinuxCount
+        }
+    )
+
+    if ($UnknownCount -gt 0) {
+        $SensorOsReport += [PSCustomObject]@{
+            OS = "Unknown/Other"
+            설치수 = $UnknownCount
+        }
+    }
+
+    Write-Host "`n[현재 센서 설치 현황]"
+    $SensorOsReport | Format-Table -AutoSize
+}
+
+# ------------------------------
+# 9. 단일 CSV 저장
+# 스크립트가 위치한 폴더에 저장
+# ------------------------------
+
+# 스크립트 실행 위치 기준 절대경로 생성
+if ($PSScriptRoot) {
+    $ScriptDir = $PSScriptRoot
+} else {
+    $ScriptDir = (Get-Location).Path
+}
+
+$CsvFileName = "falcon_daily_report_$TargetDate.csv"
+$CsvPath = Join-Path -Path $ScriptDir -ChildPath $CsvFileName
+
+# 최종 CSV 데이터 구성
+$FinalReport = @()
+
+# Alert 탐지/차단 결과
+$FinalReport += [PSCustomObject]@{
+    영역 = "Alert"
+    구분 = "탐지"
+    항목 = "단순/낮음/중간"
+    건수 = $DetectLowMid
+}
+
+$FinalReport += [PSCustomObject]@{
+    영역 = "Alert"
+    구분 = "탐지"
+    항목 = "높음/심각"
+    건수 = $DetectHighCritical
+}
+
+$FinalReport += [PSCustomObject]@{
+    영역 = "Alert"
+    구분 = "탐지"
+    항목 = "전체"
+    건수 = $DetectTotal
+}
+
+$FinalReport += [PSCustomObject]@{
+    영역 = "Alert"
+    구분 = "차단"
+    항목 = "단순/낮음/중간"
+    건수 = $BlockLowMid
+}
+
+$FinalReport += [PSCustomObject]@{
+    영역 = "Alert"
+    구분 = "차단"
+    항목 = "높음/심각"
+    건수 = $BlockHighCritical
+}
+
+$FinalReport += [PSCustomObject]@{
+    영역 = "Alert"
+    구분 = "차단"
+    항목 = "전체"
+    건수 = $BlockTotal
+}
+
+if ($UnknownTotal -gt 0) {
+    $FinalReport += [PSCustomObject]@{
+        영역 = "Alert"
+        구분 = "분류 불가"
+        항목 = "단순/낮음/중간"
+        건수 = $UnknownLowMid
+    }
+
+    $FinalReport += [PSCustomObject]@{
+        영역 = "Alert"
+        구분 = "분류 불가"
+        항목 = "높음/심각"
+        건수 = $UnknownHighCritical
+    }
+
+    $FinalReport += [PSCustomObject]@{
+        영역 = "Alert"
+        구분 = "분류 불가"
+        항목 = "전체"
+        건수 = $UnknownTotal
+    }
+}
+
+$FinalReport += [PSCustomObject]@{
+    영역 = "Alert"
+    구분 = "전체"
+    항목 = "전체 Alert"
+    건수 = $GrandTotal
+}
+
+# 센서 OS별 설치 현황
+if ($SensorOsReport) {
+    foreach ($Row in $SensorOsReport) {
+        $FinalReport += [PSCustomObject]@{
+            영역 = "Sensor"
+            구분 = "현재 센서 설치 현황"
+            항목 = $Row.OS
+            건수 = $Row.설치수
+        }
+    }
+}
+
+# CSV 저장 - Excel에서 한글이 깨지지 않도록 UTF-8 BOM 포함
+$CsvContent = $FinalReport | ConvertTo-Csv -NoTypeInformation
+
+$Utf8BomEncoding = New-Object System.Text.UTF8Encoding $true
+
+[System.IO.File]::WriteAllLines(
+    $CsvPath,
+    $CsvContent,
+    $Utf8BomEncoding
+)
+
+Write-Host "`n통합 CSV 저장 완료:"
+Write-Host $CsvPath
