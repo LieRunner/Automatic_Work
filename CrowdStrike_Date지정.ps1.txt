@@ -294,100 +294,72 @@ $Report | Format-Table -AutoSize
 
 # ------------------------------
 # 8. 현재 센서 OS별 설치 현황 조회
+# 상세조회 없이 OS별 total만 조회
 # ------------------------------
 
 Write-Host "`n[현재 센서 OS별 설치 현황 조회 시작]"
 
-$AllDeviceIds = @()
-$DeviceScrollAfter = $null
+function Get-DeviceCountByFilter {
+    param(
+        [string]$Filter
+    )
 
-do {
-    # Device ID 목록 조회
-    $DeviceQueryUri = "$BaseUrl/devices/queries/devices-scroll/v1?limit=5000"
+    $EncodedFilter = [System.Web.HttpUtility]::UrlEncode($Filter)
 
-    if ($DeviceScrollAfter) {
-        $EncodedAfter = [System.Web.HttpUtility]::UrlEncode($DeviceScrollAfter)
-        $DeviceQueryUri = "$DeviceQueryUri&offset=$EncodedAfter"
-    }
+    # limit=1만 조회하고, meta.pagination.total 값만 사용
+    $Uri = "$BaseUrl/devices/queries/devices/v1?filter=$EncodedFilter&limit=1"
 
-    $DeviceQueryResponse = Invoke-RestMethod `
+    $Response = Invoke-RestMethod `
         -Method Get `
-        -Uri $DeviceQueryUri `
+        -Uri $Uri `
         -Headers $Headers `
         -ContentType "application/json"
 
-    if ($DeviceQueryResponse.resources) {
-        $AllDeviceIds += $DeviceQueryResponse.resources
+    if ($Response.meta.pagination.total -ne $null) {
+        return [int]$Response.meta.pagination.total
+    } else {
+        return 0
     }
-
-    $DeviceScrollAfter = $DeviceQueryResponse.meta.pagination.offset
-
-} while ($DeviceScrollAfter)
-
-if ($AllDeviceIds.Count -eq 0) {
-    Write-Host "조회된 센서가 없습니다."
-} else {
-
-    $AllDevices = @()
-    $ChunkSize = 500
-
-    for ($i = 0; $i -lt $AllDeviceIds.Count; $i += $ChunkSize) {
-
-        $EndIndex = [Math]::Min($i + $ChunkSize - 1, $AllDeviceIds.Count - 1)
-        $ChunkIds = $AllDeviceIds[$i..$EndIndex]
-
-        $DeviceDetailBodyObject = @{
-            ids = $ChunkIds
-        }
-
-        $DeviceDetailBody = ConvertTo-Json -InputObject $DeviceDetailBodyObject -Depth 10 -Compress
-
-        $DeviceDetailResponse = Invoke-RestMethod `
-            -Method Post `
-            -Uri "$BaseUrl/devices/entities/devices/v2" `
-            -Headers $Headers `
-            -ContentType "application/json" `
-            -Body $DeviceDetailBody
-
-        if ($DeviceDetailResponse.resources) {
-            $AllDevices += $DeviceDetailResponse.resources
-        }
-    }
-
-    # OS별 개수 집계
-    $WindowsCount = @($AllDevices | Where-Object { $_.platform_name -match "Windows" }).Count
-    $MacCount     = @($AllDevices | Where-Object { $_.platform_name -match "Mac" }).Count
-    $LinuxCount   = @($AllDevices | Where-Object { $_.platform_name -match "Linux" }).Count
-    $UnknownCount = @($AllDevices | Where-Object {
-        [string]::IsNullOrWhiteSpace($_.platform_name) -or
-        ($_.platform_name -notmatch "Windows|Mac|Linux")
-    }).Count
-
-    $SensorOsReport = @(
-        [PSCustomObject]@{
-            OS = "Windows"
-            설치수 = $WindowsCount
-        }
-        [PSCustomObject]@{
-            OS = "Mac"
-            설치수 = $MacCount
-        }
-        [PSCustomObject]@{
-            OS = "Linux"
-            설치수 = $LinuxCount
-        }
-    )
-
-    if ($UnknownCount -gt 0) {
-        $SensorOsReport += [PSCustomObject]@{
-            OS = "Unknown/Other"
-            설치수 = $UnknownCount
-        }
-    }
-
-    Write-Host "`n[현재 센서 설치 현황]"
-    $SensorOsReport | Format-Table -AutoSize
 }
+
+$SensorWindows = Get-DeviceCountByFilter "platform_name:'Windows'"
+$SensorMac     = Get-DeviceCountByFilter "platform_name:'Mac'"
+$SensorLinux   = Get-DeviceCountByFilter "platform_name:'Linux'"
+
+$SensorTotalKnown = $SensorWindows + $SensorMac + $SensorLinux
+
+# 전체 센서 수
+$SensorTotal = Get-DeviceCountByFilter ""
+
+$SensorOther = $SensorTotal - $SensorTotalKnown
+if ($SensorOther -lt 0) {
+    $SensorOther = 0
+}
+
+$SensorOsReport = @(
+    [PSCustomObject]@{
+        OS = "Windows"
+        설치수 = $SensorWindows
+    }
+    [PSCustomObject]@{
+        OS = "Mac"
+        설치수 = $SensorMac
+    }
+    [PSCustomObject]@{
+        OS = "Linux"
+        설치수 = $SensorLinux
+    }
+)
+
+if ($SensorOther -gt 0) {
+    $SensorOsReport += [PSCustomObject]@{
+        OS = "Other"
+        설치수 = $SensorOther
+    }
+}
+
+Write-Host "`n[현재 센서 설치 현황]"
+$SensorOsReport | Format-Table -AutoSize
 
 # ------------------------------
 # 9. 단일 CSV 저장
