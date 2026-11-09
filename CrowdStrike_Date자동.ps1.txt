@@ -10,7 +10,7 @@ if ([string]::IsNullOrWhiteSpace($TargetDate)) {
 # =========================================================
 # CrowdStrike Falcon Alert Daily Report
 # 실행 예:
-# pwsh ./falcon_report.ps1 -TargetDate "2026-06-10"
+# powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File .\CrowdStrike_DateAUTO.ps1 -TargetDate "2026-08-22"
 # =========================================================
 
 # ------------------------------
@@ -34,6 +34,7 @@ $Config = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
 $BaseUrl = $Config.BaseUrl
 $ClientId = $Config.ClientId
 $ClientSecret = $Config.ClientSecret
+$TeamsWebhookUrl = $Config.TeamsWebhookUrl
 
 if ([string]::IsNullOrWhiteSpace($BaseUrl) -or
     [string]::IsNullOrWhiteSpace($ClientId) -or
@@ -481,3 +482,86 @@ $Utf8BomEncoding = New-Object System.Text.UTF8Encoding $true
 
 Write-Host "`n통합 CSV 저장 완료:"
 Write-Host $CsvPath
+
+# ------------------------------
+# 10. Teams Webhook 전송 - Adaptive Card
+# ------------------------------
+
+$TeamsPayloadObject = @{
+    type = "message"
+    attachments = @(
+        @{
+            contentType = "application/vnd.microsoft.card.adaptive"
+            content = @{
+                '$schema' = "http://adaptivecards.io/schemas/adaptive-card.json"
+                type = "AdaptiveCard"
+                version = "1.4"
+                body = @(
+                    @{
+                        type = "TextBlock"
+                        text = "CrowdStrike 일일보고"
+                        weight = "Bolder"
+                        size = "Large"
+                    }
+                    @{
+                        type = "TextBlock"
+                        text = "조회 기간: $TargetDate 00:00:00 ~ $TargetDate 23:59:59"
+                        wrap = $true
+                    }
+                    @{
+                        type = "FactSet"
+                        facts = @(
+                            @{ title = "탐지 전체"; value = "$DetectTotal" }
+                            @{ title = "탐지 단순/낮음/중간"; value = "$DetectLowMid" }
+                            @{ title = "탐지 높음/심각"; value = "$DetectHighCritical" }
+                            @{ title = "차단 전체"; value = "$BlockTotal" }
+                            @{ title = "차단 단순/낮음/중간"; value = "$BlockLowMid" }
+                            @{ title = "차단 높음/심각"; value = "$BlockHighCritical" }
+                            @{ title = "전체 Alert"; value = "$GrandTotal" }
+                            @{ title = "Windows Sensor"; value = "$SensorWindows" }
+                            @{ title = "Mac Sensor"; value = "$SensorMac" }
+                            @{ title = "Linux Sensor"; value = "$SensorLinux" }
+                            @{ title = "Other Sensor"; value = "$SensorOther" }
+                        )
+                    }
+                    @{
+                        type = "TextBlock"
+                        text = "CSV 저장 위치: $CsvPath"
+                        wrap = $true
+                        size = "Small"
+                    }
+                )
+            }
+        }
+    )
+}
+
+$TeamsPayload = $TeamsPayloadObject | ConvertTo-Json -Depth 20
+
+# 한글 깨짐 방지: UTF-8 byte array로 전송
+$Utf8NoBom = New-Object System.Text.UTF8Encoding $false
+$TeamsPayloadBytes = $Utf8NoBom.GetBytes($TeamsPayload)
+
+try {
+    $InvokeParams = @{
+        Method      = "Post"
+        Uri         = $TeamsWebhookUrl
+        ContentType = "application/json; charset=utf-8"
+        Body        = $TeamsPayloadBytes
+    }
+
+    # WSL/Linux에서 회사 SSL Inspection 인증서 문제 임시 우회
+    # 정식 운영은 회사 Root CA를 WSL에 등록하는 방식 권장
+    if ($IsLinux -and $PSVersionTable.PSVersion.Major -ge 7) {
+        $InvokeParams.SkipCertificateCheck = $true
+    }
+
+    Invoke-RestMethod @InvokeParams
+
+    Write-Host "Teams 전송 완료"
+}
+catch {
+    Write-Host "Teams 전송 실패"
+    Write-Host $_.Exception.Message
+    exit 1
+}
