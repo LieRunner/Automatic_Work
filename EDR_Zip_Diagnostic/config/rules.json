@@ -1,0 +1,76 @@
+{
+  "SchemaVersion": 1,
+  "Rules": [
+    {
+      "Id": "RPM_DB_RUNRECOVERY",
+      "Enabled": true,
+      "Source": "StateCapture",
+      "MatchType": "Contains",
+      "PatternMode": "Any",
+      "Patterns": [
+        "DB_RUNRECOVERY"
+      ],
+      "Category": "RPM_DB",
+      "Priority": 300,
+      "QuickResponse": true,
+      "DecisionCode": "RPM_DB_ERROR",
+      "DecisionText": "RPM DB 오류",
+      "ActionCode": "RPM_DB_RECOVERY_THEN_REINSTALL",
+      "ActionText": "서버 관리자 측 RPM DB 확인 및 복구 후 에이전트 재시작"
+    },
+    {
+      "Id": "RPM_DB_OPEN_ERROR",
+      "Enabled": true,
+      "Source": "StateCapture",
+      "MatchType": "Regex",
+      "PatternMode": "Any",
+      "Patterns": [
+        "cannot\\s+open\\s+Packages\\s+database",
+        "cannot\\s+open\\s+Packages\\s+index\\s+using\\s+db[0-9]+"
+      ],
+      "Category": "RPM_DB",
+      "Priority": 300,
+      "QuickResponse": true,
+      "DecisionCode": "RPM_DB_ERROR",
+      "DecisionText": "RPM DB 오류",
+      "ActionCode": "RPM_DB_RECOVERY_THEN_REINSTALL",
+      "ActionText": "서버 관리자 측 RPM DB 확인 및 복구 후 에이전트 재시작"
+    },
+    {
+      "Id": "XBC_CONFIG_ERROR",
+      "Enabled": true,
+      "Source": "TmxbcLog",
+      "MatchType": "Contains",
+      "PatternMode": "Any",
+      "Patterns": [
+        "failed to read config file",
+        "failed to init xbc config"
+      ],
+      "Category": "XBC_CONFIG",
+      "Priority": 200,
+      "QuickResponse": true,
+      "DecisionCode": "XBC_CONFIG_ERROR",
+      "DecisionText": "XBC Config 오류",
+      "ActionCode": "REINSTALL_AGENT",
+      "ActionText": "에이전트 재설치"
+    },
+    {
+      "Id": "RPM_DB_MEMORY_ERROR_TMXBC",
+      "Enabled": true,
+      "Source": "TmxbcLog",
+      "MatchType": "Regex",
+      "PatternMode": "All",
+      "Patterns": [
+        "Cannot\\s+allocate\\s+memory",
+        "db[0-9]+\\s+error\\([^)]*\\)\\s+from\\s+dbcursor->c_put"
+      ],
+      "Category": "RPM_DB",
+      "Priority": 300,
+      "QuickResponse": true,
+      "DecisionCode": "RPM_DB_ERROR",
+      "DecisionText": "RPM DB 오류",
+      "ActionCode": "RPM_DB_RECOVERY_THEN_REINSTALL",
+      "ActionText": "서버 관리자 측 RPM DB 확인 및 복구 후 에이전트 재시작"
+    }
+  ]
+}
