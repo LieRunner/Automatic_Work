@@ -1,0 +1,55 @@
+{
+  "SchemaVersion": 1,
+  "Files": [
+    {
+      "Id": "HostInfo",
+      "Description": "호스트명, IP, ds_agent HostGUID 추출용 Manager Host XML",
+      "Path": "Manager/host*.xml",
+      "MatchMode": "WildcardSuffix",
+      "Required": false
+    },
+    {
+      "Id": "StateCapture",
+      "Description": "Linux 상태 정보 및 RPM DB 오류 확인용",
+      "Path": "Agent/Linux/dsa-state-capture-output.txt",
+      "MatchMode": "Suffix",
+      "StandaloneNames": [
+        "dsa-state-capture-output*.txt",
+        "*_dsa-state-capture-output*.txt"
+      ],
+      "Required": false
+    },
+    {
+      "Id": "TmxbcLog",
+      "Description": "tmxbc 상태 및 XBC Config 오류 확인용",
+      "Path": "Agent/logs/tmxbc.log",
+      "MatchMode": "Suffix",
+      "StandaloneNames": [
+        "tmxbc*.log",
+        "*_tmxbc*.log"
+      ],
+      "Required": false
+    },
+    {
+      "Id": "ProxyInfo",
+      "Description": "실제 사용 Proxy 확인용",
+      "Path": "Agent/proxyInfo.json",
+      "MatchMode": "Suffix",
+      "Required": false
+    },
+    {
+      "Id": "ServiceGatewayInfo",
+      "Description": "실제 연결된 Service Gateway 확인용",
+      "Path": "Agent/serviceGatewayInfo.json",
+      "MatchMode": "Suffix",
+      "Required": false
+    },
+    {
+      "Id": "RunningProcesses",
+      "Description": "vls_agent 및 tmxbc 실행 상태 확인용",
+      "Path": "Agent/RunningProcesses.xml",
+      "MatchMode": "Suffix",
+      "Required": false
+    }
+  ]
+}
