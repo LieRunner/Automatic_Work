@@ -1,0 +1,20 @@
+sblee3355@LPC-SBLEE3355-412N:/mnt/e/SWP_Daily_Report$ python3 test_swp_api.py
+============================================================
+SWP API TEST
+============================================================
+Start (KST): 2026-11-26 00:00:00+09:00
+End   (KST): 2026-11-27 00:00:00+09:00
+Start (UTC): 2026-11-25T15:00:00Z
+End   (UTC): 2026-11-26T15:00:00Z
+
+============================================================
+[TEST] AM
+Query: eventName:MALWARE_DETECTION
+Request Error: HTTPSConnectionPool(host='api.sg.xdr.trendmicro.com', port=443): Max retries exceeded with url: /v3.0/search/detections?startDateTime=2026-11-25T15%3A00%3A00Z&endDateTime=2026-11-26T15%3A00%3A00Z&top=50&mode=default (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1081)')))
+
+============================================================
+[TEST] IPS
+Query: eventName:DEEP_PACKET_INSPECTION_EVENT
+Request Error: HTTPSConnectionPool(host='api.sg.xdr.trendmicro.com', port=443): Max retries exceeded with url: /v3.0/search/detections?startDateTime=2026-11-25T15%3A00%3A00Z&endDateTime=2026-11-26T15%3A00%3A00Z&top=50&mode=default (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1081)')))
+
+[TEST COMPLETED]
