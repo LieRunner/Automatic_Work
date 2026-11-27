@@ -1,15 +1,2 @@
-check_fields = [
-    "productCode",
-    "pname",
-    "eventName",
-    "eventId",
-    "eventSourceType",
-    "act",
-    "actResult",
-    "firstAct",
-    "aggregatedCount",
-    "ruleName",
-    "ruleId",
-    "cat",
-    "severity"
-]
+
+TEAMS_WEBHOOK_URL="발급받은_웹훅_URL"
