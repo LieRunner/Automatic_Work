@@ -1,4 +1,86 @@
 
+import os
+import json
+import argparse
+import requests
+
+from pathlib import Path
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
+from dotenv import load_dotenv
+
+
+# 설정 파일 불러오기
+BASE_DIR = Path(__file__).resolve().parent
+
+load_dotenv(BASE_DIR / ".env")
+
+with open(
+    BASE_DIR / "config.json",
+    encoding="utf-8"
+) as f:
+    config = json.load(f)
+
+BASE_URL = os.environ["VISION_ONE_BASE_URL"].rstrip("/")
+API_KEY = os.environ["VISION_ONE_API_KEY"]
+
+if not BASE_URL.startswith("https://"):
+    raise ValueError("HTTPS API URL is required.")
+
+URL = BASE_URL + config["endpoint"]
+KST = ZoneInfo(config["timezone"])
+
+
+# 조회 날짜 설정
+parser = argparse.ArgumentParser()
+
+parser.add_argument(
+    "--date",
+    type=lambda s: datetime.strptime(s, "%Y-%m-%d").date(),
+    default=datetime.now(KST).date()
+)
+
+parser.add_argument(
+    "--sample",
+    action="store_true"
+)
+
+args = parser.parse_args()
+
+end_kst = datetime.combine(
+    args.date,
+    datetime.min.time(),
+    tzinfo=KST
+)
+
+start_kst = end_kst - timedelta(days=1)
+
+params = {
+    "startDateTime": start_kst.astimezone(
+        timezone.utc
+    ).strftime("%Y-%m-%dT%H:%M:%SZ"),
+
+    "endDateTime": end_kst.astimezone(
+        timezone.utc
+    ).strftime("%Y-%m-%dT%H:%M:%SZ"),
+
+    "top": config["top"],
+    "mode": config["mode"]
+}
+
+
+# 조회 기간 출력
+print("=" * 60)
+print("SWP API TEST")
+print("=" * 60)
+
+print(f"Start (KST): {start_kst}")
+print(f"End   (KST): {end_kst}")
+print(f"Start (UTC): {params['startDateTime']}")
+print(f"End   (UTC): {params['endDateTime']}")
+
+
+
 # API 조회 및 전체 집계 테스트
 from collections import Counter
 from urllib.parse import urljoin, urlsplit
@@ -6,7 +88,7 @@ from urllib.parse import urljoin, urlsplit
 with requests.Session() as session:
 
     session.headers.update({
-        "Authorization": f"Bearer {API_TOKEN}",
+        "Authorization": f"Bearer {API_KEY}",
         "Accept": "application/json"
     })
 
