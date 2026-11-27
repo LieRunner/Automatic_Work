@@ -4,8 +4,9 @@
     "timeout": 120,
     "top": 50,
     "mode": "default",
+    "verify_ssl": false,
     "queries": {
-        "am": "eventName:MALWARE_DETECTION",
-        "ips": "eventName:DEEP_PACKET_INSPECTION_EVENT"
+        "am": "productCode:sds AND eventName:MALWARE_DETECTION",
+        "ips": "productCode:sds AND eventName:DEEP_PACKET_INSPECTION_EVENT"
     }
 }
