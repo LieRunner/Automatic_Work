@@ -1,4 +1,3 @@
-sblee3355@LPC-SBLEE3355-412N:/mnt/e/SWP_Daily_Report$ python3 test_swp_api.py
 ============================================================
 SWP API TEST
 ============================================================
@@ -10,11 +9,17 @@ End   (UTC): 2026-11-26T15:00:00Z
 ============================================================
 [TEST] AM
 Query: eventName:MALWARE_DETECTION
-Request Error: HTTPSConnectionPool(host='api.sg.xdr.trendmicro.com', port=443): Max retries exceeded with url: /v3.0/search/detections?startDateTime=2026-11-25T15%3A00%3A00Z&endDateTime=2026-11-26T15%3A00%3A00Z&top=50&mode=default (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1081)')))
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+HTTP Status: 403
+{"error":{"code":"PermissionDeny","number":6000021,"message":"Role denied.","innererror":{"code":"CmdNoPermission","innererror":{"code":"HttpRoleDisabled","service":"ase"}},"detail":"Endpoint-Read-Only"}}
 
 ============================================================
 [TEST] IPS
 Query: eventName:DEEP_PACKET_INSPECTION_EVENT
-Request Error: HTTPSConnectionPool(host='api.sg.xdr.trendmicro.com', port=443): Max retries exceeded with url: /v3.0/search/detections?startDateTime=2026-11-25T15%3A00%3A00Z&endDateTime=2026-11-26T15%3A00%3A00Z&top=50&mode=default (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1081)')))
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+HTTP Status: 403
+{"error":{"code":"PermissionDeny","number":6000021,"message":"Role denied.","innererror":{"code":"CmdNoPermission","innererror":{"code":"HttpRoleDisabled","service":"ase"}},"detail":"Endpoint-Read-Only"}}
 
 [TEST COMPLETED]
