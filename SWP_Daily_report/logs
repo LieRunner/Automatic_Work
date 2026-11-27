@@ -103,6 +103,44 @@ Next Link Exists: True
  - targetType
  - uuid
 
+[Field Values]
+
+[productCode]
+ - "sds"
+
+[pname]
+ - "Server & Workload Protection"
+
+[eventName]
+ - "MALWARE_DETECTION"
+
+[eventSourceType]
+ - 3
+
+[act]
+ - Field not found
+
+[actResult]
+ - ["Passed"]
+
+[firstAct]
+ - "Pass"
+
+[firstActResult]
+ - "File passed"
+
+[aggregatedCount]
+ - Field not found
+
+[reason]
+ - Field not found
+
+[msg]
+ - Field not found
+
+[remarks]
+ - Field not found
+
 ============================================================
 [TEST] IPS
 Query: eventName:DEEP_PACKET_INSPECTION_EVENT
@@ -176,5 +214,73 @@ Next Link Exists: True
  - tags
  - uuid
 
-[TEST COMPLETED]
-sblee3355@LPC-SBLEE3355-412N:/mnt/e/SWP_Daily_Report$
+[Field Values]
+
+[productCode]
+ - "sds"
+
+[pname]
+ - "Server & Workload Protection"
+
+[eventName]
+ - "DEEP_PACKET_INSPECTION_EVENT"
+
+[eventSourceType]
+ - 3
+
+[act]
+ - ["Detect Only: Reset"]
+ - ["Reset"]
+
+[actResult]
+ - Field not found
+
+[firstAct]
+ - Field not found
+
+[firstActResult]
+ - Field not found
+
+[aggregatedCount]
+ - "1"
+ - "2"
+ - "25"
+ - "3"
+ - "5"
+ - "9"
+
+[reason]
+ - Field not found
+
+[msg]
+ - "GET ..\\..\\..\\..\\..\\..\\windows\\win.ini HTTP/1.1\r\nHost: 172.21.87.139:5000\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Close\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET ..\\..\\..\\..\\..\\..\\windows\\win.ini HTTP/1.1\r\nHost: 172.21.87.152:10000\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Close\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET ..\\..\\..\\..\\..\\..\\windows\\win.ini HTTP/1.1\r\nHost: 172.21.87.152:15672\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Close\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET ..\\..\\..\\..\\..\\..\\windows\\win.ini HTTP/1.1\r\nHost: 172.21.87.152:7000\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Close\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET ..\\..\\..\\..\\..\\..\\windows\\win.ini HTTP/1.1\r\nHost: 172.21.87.152\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Keep-Alive\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET ..\\..\\..\\..\\..\\..\\windows\\win.ini HTTP/1.1\r\nHost: 172.21.87.171:5985\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Close\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET ..\\..\\..\\..\\..\\..\\windows\\win.ini HTTP/1.1\r\nHost: 172.21.87.174:5985\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Close\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET ..\\..\\..\\..\\..\\..\\windows\\win.ini HTTP/1.1\r\nHost: 172.21.87.174:8530\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Keep-Alive\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET ..\\..\\..\\..\\..\\..\\windows\\win.ini HTTP/1.1\r\nHost: 172.21.87.174\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Keep-Alive\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET ././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././../../../../../../../../ HTTP/1.1\r\nConnection: Keep-Alive\r\nHost: 172.21.87.152\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\nAccept-Language: en\r\nAccept-Charset: iso-8859-1,*,utf-8\r\n\r\n"
+ - "GET ././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././../../../../../../../../ HTTP/1.1\r\nConnection: Keep-Alive\r\nHost: 172.21.87.166\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\nAccept-Language: en\r\nAccept-Charset: iso-8859-1,*,utf-8\r\n\r\n"
+ - "GET ././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././../../../../../../../../ HTTP/1.1\r\nConnection: Keep-Alive\r\nHost: 172.21.87.171\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\nAccept-Language: en\r\nAccept-Charset: iso-8859-1,*,utf-8\r\n\r\n"
+ - "GET ././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././../../../../../../../../ HTTP/1.1\r\nConnection: Keep-Alive\r\nHost: 172.21.87.174\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\nAccept-Language: en\r\nAccept-Charset: iso-8859-1,*,utf-8\r\n\r\n"
+ - "GET /%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/etc/passwd HTTP/1.1\r\nConnection: Close\r\nHost: 172.21.87.161\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\nAccept-Language: en\r\nAccept-Charset: iso-8859-1,*,utf-8\r\n\r\n"
+ - "GET /../../../../../../../../../../../../windows/win.ini HTTP/1.1\r\nHost: 172.21.86.211:5985\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Close\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET /../../../../../../../../../../../../windows/win.ini HTTP/1.1\r\nHost: 172.21.87.161\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Keep-Alive\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET /../../../../../../../../../../../../windows/win.ini HTTP/1.1\r\nHost: 172.21.87.171:5985\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Close\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET /../../../../../../../../../../../../windows/win.ini HTTP/1.1\r\nHost: 172.21.87.174:5985\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Close\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET /cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/etc/passwd HTTP/1.1\r\nHost: 172.21.87.152:10000\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Keep-Alive\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET /cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/etc/passwd HTTP/1.1\r\nHost: 172.21.87.152:15672\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Keep-Alive\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET /cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/etc/passwd HTTP/1.1\r\nHost: 172.21.87.152:7000\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Keep-Alive\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET /error/%5c%2e%2e%5c%2e%2e%5c%2e%2e%5c%2e%2e%5cautoexec.bat HTTP/1.1\r\nHost: 172.21.87.152\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Keep-Alive\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "GET /error/%5c%2e%2e%5c%2e%2e%5c%2e%2e%5c%2e%2e%5cautoexec.bat HTTP/1.1\r\nHost: 172.21.87.161\r\nAccept-Charset: iso-8859-1,utf-8;q=0.9,*;q=0.1\r\nAccept-Language: en\r\nConnection: Keep-Alive\r\nPragma: no-cache\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\n\r\n"
+ - "�C�\u0000\u0000\u0001\u0000\u0004\u0000\u0000\u0000\u0001\u0006seismo\u0004ethz\u0002ch\u0000\u0000\u0001\u0000\u0001\u000elb-webhost-vip�\u0013\u0000.\u0000\u0001\u0000\u0000\u0000<\u0000[\u0000\u0001\r\u0003\u0000\u0000\u0000<k\u0019�j�<\u0000��\u0004ethz\u0002ch\u0000\u0002�\f��v��\\\u000fK��*\u0000��Xs�ԲF7*ˡ��taD,��\r�\"\n#��0\n���GAe���>����\u001d�Y\u0004�\f\u0000\u0005\u0000\u0001\u0000\u0000\u0000x\u0000\u0002� �\f\u0000.\u0000\u0001\u0000\u0000\u0000x\u0000[\u0000\u0005\r\u0003\u0000\u0000\u0000xk\u0019�j�<\u0000��\u0004ethz\u0002ch\u0000hG�\u001f�(D�uĊFW�w���L9��S�0��,�I\f#��'\f��8�t�\u0001N�-9�\u0004��NǖJЖj=JTd,� \u0000\u0001\u0000\u0001\u0000\u0000\u0000<\u0000\u0004��g�\u0000\u0000)\u0004�\u0000\u0000�\u0000\u0000\u0000"
+ - "�y�\u0000\u0000\u0001\u0000\u0005\u0000\u0000\u0000\u0001\u0016tehraadg20251107110301\ttoffsmcdn\u0003net\u0000\u0000\u0001\u0000\u0001\u000bindo-postel�#\u0000.\u0000\u0001\u0000\u0000\u0000<\u0000a\u0000\u0001\r\u0003\u0000\u0000\u0000<k\u0019�j�<\u00009�\ttoffsmcdn\u0003net\u0000p�����W�\u001e21�ޯ�'S9R)͛8'��V2&�x��$\u0015Z\u001e(ސ�.X��atR�\u000e�Q�|��'ġ�kK�\f\u0000\u0005\u0000\u0001\u0000\u0000\u0000<\u0000\u0002�6�\f\u0000.\u0000\u0001\u0000\u0000\u0000<\u0000a\u0000\u0005\r\u0003\u0000\u0000\u0000<k\u0019�j�<\u00009�\ttoffsmcdn\u0003net\u0000�~�A��s�\u001c9..?k��߰��lX�eA>��T(��Q�a@\u0001�\u001a�$����)�e\n\u001ej�֛�2��U�a\u001e��6\u0000\u0001\u0000\u0001\u0000\u0000\u0000<\u0000\u0004+��,�6\u0000\u0001\u0000\u0001\u0000\u0000\u0000<\u0000\u0004\u001fak<\u0000\u0000)\u0004�\u0000\u0000�\u0000\u0000\u0000"
+
+[remarks]
+ - "{\"note\":\"CVE-2016-9147-1\"}"
+ - "{\"note\":\"uri-normalize\"}"
+
+[TEST COMPLETED
