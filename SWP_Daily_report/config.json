@@ -1,0 +1,11 @@
+{
+    "timezone": "Asia/Seoul",
+    "endpoint": "/v3.0/search/detections",
+    "timeout": 120,
+    "top": 50,
+    "mode": "default",
+    "queries": {
+        "am": "eventName:MALWARE_DETECTION",
+        "ips": "eventName:DEEP_PACKET_INSPECTION_EVENT"
+    }
+}
