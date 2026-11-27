@@ -11,15 +11,170 @@ End   (UTC): 2026-11-26T15:00:00Z
 Query: eventName:MALWARE_DETECTION
 /usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
   warnings.warn(
-HTTP Status: 403
-{"error":{"code":"PermissionDeny","number":6000021,"message":"Role denied.","innererror":{"code":"CmdNoPermission","innererror":{"code":"HttpRoleDisabled","service":"ase"}},"detail":"Endpoint-Read-Only"}}
+HTTP Status: 200
+Response Keys: ['items', 'progressRate', 'nextLink']
+Total Count: N/A
+Progress Rate: 9
+Returned Items: 50
+Next Link Exists: True
+
+[Available Fields]
+ - actResult
+ - behaviorCat
+ - detectionAggressivenessLevel
+ - domainName
+ - endpointGUID
+ - endpointHostName
+ - endpointIp
+ - engType
+ - engVer
+ - engineOperation
+ - eventId
+ - eventName
+ - eventSourceType
+ - eventTime
+ - eventTimeDT
+ - fileCreation
+ - fileHash
+ - fileHashSha256
+ - fileName
+ - filePath
+ - filePathName
+ - filterRiskLevel
+ - firstAct
+ - firstActResult
+ - groupId
+ - interestedHost
+ - interestedIp
+ - interestedIpCountry
+ - interestedIpIsp
+ - logKey
+ - logReceivedTime
+ - mDeviceGUID
+ - majorVirusType
+ - malFamily
+ - malName
+ - malType
+ - mpname
+ - mpver
+ - objectCmd
+ - objectFileHashSha1
+ - objectFileName
+ - objectFilePath
+ - objectFileRemoteAccess
+ - objectFileSize
+ - objectHashId
+ - objectIntegrityLevel
+ - objectLastModifyTime
+ - objectLaunchTime
+ - objectPid
+ - objectProcessName
+ - objectSigner
+ - objectSignerValid
+ - objectSubTrueType
+ - objectTrueType
+ - objectType
+ - patVer
+ - pname
+ - policyId
+ - processChainInfo
+ - processCmd
+ - processHashId
+ - processImagePath
+ - processName
+ - processPid
+ - productCode
+ - protectionManager
+ - pver
+ - rt
+ - rtDate
+ - rtHour
+ - rtWeekDay
+ - rt_utc
+ - ruleIdStr
+ - scanType
+ - searchDL
+ - secondAct
+ - secondActResult
+ - senderGUID
+ - severity
+ - tags
+ - target
+ - targetType
+ - uuid
 
 ============================================================
 [TEST] IPS
 Query: eventName:DEEP_PACKET_INSPECTION_EVENT
 /usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
   warnings.warn(
-HTTP Status: 403
-{"error":{"code":"PermissionDeny","number":6000021,"message":"Role denied.","innererror":{"code":"CmdNoPermission","innererror":{"code":"HttpRoleDisabled","service":"ase"}},"detail":"Endpoint-Read-Only"}}
+HTTP Status: 200
+Response Keys: ['items', 'progressRate', 'nextLink']
+Total Count: N/A
+Progress Rate: 1
+Returned Items: 50
+Next Link Exists: True
+
+[Available Fields]
+ - act
+ - aggregatedCount
+ - cat
+ - dmac
+ - dpt
+ - dst
+ - dstCity
+ - dstCountry
+ - dstIsp
+ - endTime
+ - endpointGUID
+ - endpointHostName
+ - endpointIp
+ - eventId
+ - eventName
+ - eventSourceType
+ - eventTime
+ - eventTimeDT
+ - filterRiskLevel
+ - groupId
+ - interestedHost
+ - interestedIp
+ - interestedIpCity
+ - interestedIpCountry
+ - interestedIpIsp
+ - logKey
+ - logReceivedTime
+ - mDeviceGUID
+ - mpname
+ - mpver
+ - msg
+ - out
+ - pname
+ - processName
+ - productCode
+ - protectionManager
+ - proto
+ - protoFlag
+ - pver
+ - remarks
+ - rt
+ - rtDate
+ - rtHour
+ - rtWeekDay
+ - rt_utc
+ - ruleId
+ - ruleName
+ - searchDL
+ - senderGUID
+ - severity
+ - smac
+ - spt
+ - src
+ - srcCity
+ - srcCountry
+ - srcIsp
+ - startTime
+ - tags
+ - uuid
 
 [TEST COMPLETED]
+sblee3355@LPC-SBLEE3355-412N:/mnt/e/SWP_Daily_Report$
