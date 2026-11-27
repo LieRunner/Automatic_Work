@@ -1,4 +1,4 @@
-sblee3355@LPC-SBLEE3355-412N:/mnt/e/SWP_Daily_Report$ python3 test_swp_api.py --date 2026-11-27 --sample
+sblee3355@LPC-SBLEE3355-412N:/mnt/e/SWP_Daily_Report$ python3 test_swp_api.py --date 2026-11-27
 ============================================================
 SWP API TEST
 ============================================================
@@ -12,261 +12,83 @@ End   (UTC): 2026-11-26T15:00:00Z
 Query: productCode:sds AND eventName:MALWARE_DETECTION
 /usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
   warnings.warn(
-HTTP Status: 200
-Response Keys: ['items', 'progressRate', 'nextLink']
-Total Count: N/A
-Progress Rate: 9
-Returned Items: 50
-Next Link Exists: True
+Page: 1 | Progress: 9% | Fetched: 50 | Total: 50
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 2 | Progress: 18% | Fetched: 50 | Total: 100
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 3 | Progress: 28% | Fetched: 50 | Total: 150
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 4 | Progress: 37% | Fetched: 50 | Total: 200
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 5 | Progress: 46% | Fetched: 50 | Total: 250
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 6 | Progress: 56% | Fetched: 50 | Total: 300
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 7 | Progress: 65% | Fetched: 50 | Total: 350
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 8 | Progress: 74% | Fetched: 50 | Total: 400
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 9 | Progress: 84% | Fetched: 50 | Total: 450
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 10 | Progress: 93% | Fetched: 50 | Total: 500
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 11 | Progress: 100% | Fetched: 34 | Total: 534
 
-[Available Fields]
- - actResult
- - behaviorCat
- - detectionAggressivenessLevel
- - domainName
- - endpointGUID
- - endpointHostName
- - endpointIp
- - engType
- - engVer
- - engineOperation
- - eventId
- - eventName
- - eventSourceType
- - eventTime
- - eventTimeDT
- - fileCreation
- - fileHash
- - fileHashSha256
- - fileName
- - filePath
- - filePathName
- - filterRiskLevel
- - firstAct
- - firstActResult
- - groupId
- - interestedHost
- - interestedIp
- - interestedIpCountry
- - interestedIpIsp
- - logKey
- - logReceivedTime
- - mDeviceGUID
- - majorVirusType
- - malFamily
- - malName
- - malType
- - mpname
- - mpver
- - objectCmd
- - objectFileHashSha1
- - objectFileName
- - objectFilePath
- - objectFileRemoteAccess
- - objectFileSize
- - objectHashId
- - objectIntegrityLevel
- - objectLastModifyTime
- - objectLaunchTime
- - objectPid
- - objectProcessName
- - objectSigner
- - objectSignerValid
- - objectSubTrueType
- - objectTrueType
- - objectType
- - patVer
- - pname
- - policyId
- - processChainInfo
- - processCmd
- - processHashId
- - processImagePath
- - processName
- - processPid
- - productCode
- - protectionManager
- - pver
- - rt
- - rtDate
- - rtHour
- - rtWeekDay
- - rt_utc
- - ruleIdStr
- - scanType
- - searchDL
- - secondAct
- - secondActResult
- - senderGUID
- - severity
- - tags
- - target
- - targetType
- - uuid
-
-[Field Values]
-
-[productCode]
- - "sds"
-
-[pname]
- - "Server & Workload Protection"
-
-[eventName]
- - "MALWARE_DETECTION"
-
-[eventId]
- - "100100"
-
-[eventSourceType]
- - 3
-
-[act]
- - Field not found
-
-[actResult]
- - ["Passed"]
-
-[firstAct]
- - "Pass"
-
-[aggregatedCount]
- - Field not found
-
-[ruleName]
- - Field not found
-
-[ruleId]
- - Field not found
-
-[cat]
- - Field not found
-
-[severity]
- - 4
+[FINAL RESULTS]
+Total Pages   : 11
+Progress      : 100%
+Total Records : 534
 
 ============================================================
 [TEST] IPS
 Query: productCode:sds AND eventName:DEEP_PACKET_INSPECTION_EVENT
 /usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
   warnings.warn(
-HTTP Status: 200
-Response Keys: ['items', 'progressRate', 'nextLink']
-Total Count: N/A
-Progress Rate: 1
-Returned Items: 50
-Next Link Exists: True
+Page: 1 | Progress: 1% | Fetched: 50 | Total: 50
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 2 | Progress: 2% | Fetched: 50 | Total: 100
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 3 | Progress: 4% | Fetched: 50 | Total: 150
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 4 | Progress: 5% | Fetched: 50 | Total: 200
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 5 | Progress: 7% | Fetched: 50 | Total: 250
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 6 | Progress: 8% | Fetched: 50 | Total: 300
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 7 | Progress: 9% | Fetched: 50 | Total: 350
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 8 | Progress: 11% | Fetched: 50 | Total: 400
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 9 | Progress: 12% | Fetched: 50 | Total: 450
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 10 | Progress: 14% | Fetched: 50 | Total: 500
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+Page: 11 | Progress: 15% | Fetched: 50 | Total: 550
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1109: InsecureRequestWarning: Unverified HTTPS request is being made to host 'api.sg.xdr.trendmicro.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
 
-[Available Fields]
- - act
- - aggregatedCount
- - cat
- - dmac
- - dpt
- - dst
- - dstCity
- - dstCountry
- - dstIsp
- - endTime
- - endpointGUID
- - endpointHostName
- - endpointIp
- - eventId
- - eventName
- - eventSourceType
- - eventTime
- - eventTimeDT
- - filterRiskLevel
- - groupId
- - interestedHost
- - interestedIp
- - interestedIpCity
- - interestedIpCountry
- - interestedIpIsp
- - logKey
- - logReceivedTime
- - mDeviceGUID
- - mpname
- - mpver
- - msg
- - out
- - pname
- - processName
- - productCode
- - protectionManager
- - proto
- - protoFlag
- - pver
- - remarks
- - rt
- - rtDate
- - rtHour
- - rtWeekDay
- - rt_utc
- - ruleId
- - ruleName
- - searchDL
- - senderGUID
- - severity
- - smac
- - spt
- - src
- - srcCity
- - srcCountry
- - srcIsp
- - startTime
- - tags
- - uuid
-
-[Field Values]
-
-[productCode]
- - "sds"
-
-[pname]
- - "Server & Workload Protection"
-
-[eventName]
- - "DEEP_PACKET_INSPECTION_EVENT"
-
-[eventId]
- - "100115"
-
-[eventSourceType]
- - 3
-
-[act]
- - ["Detect Only: Reset"]
- - ["Reset"]
-
-[actResult]
- - Field not found
-
-[firstAct]
- - Field not found
-
-[aggregatedCount]
- - "1"
- - "2"
- - "25"
- - "3"
- - "5"
- - "9"
-
-[ruleName]
- - "ISC BIND RRSIG Record Response Assertion Failure Denial Of Service (CVE-2016-9147)"
- - "Invalid Traversal"
-
-[ruleId]
- - 1008136
-
-[cat]
- - 100
- - 25
-
-[severity]
- - 2
- - 8
+[TEST FAILED] HTTP 429: {"error":{"message":"Rate limit exceeded","code":"TooManyRequests","innererror":{"code":"TooManyRequests","service":"svp"}}}
+Partial results only. Do not use for reporting.
 
 [TEST COMPLETED]
-sblee3355@LPC-SBLEE3355-412N:/mnt/e/SWP_Daily_Report$
